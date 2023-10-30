@@ -1,4 +1,8 @@
-import math
+#import math
+
+from math import sqrt
+
+#from math import sqrt as корень - пример как переменовать библиотеку для всего проекта
 
 print("программа для решений квадратных уровнений")
 bad_data = True
@@ -12,10 +16,11 @@ while bad_data == True:
         print("данные не привести к числу")
 
 D = (b * b) - (4 * a * c)
-print(D)
+print("Дискреминант равен:",D)
 
 if D > 0:
-    d = math.sqrt(D)
+    #d = math.sqrt(D)
+    d = sqrt(D)
     x1 = ((-b) + d) / (2 * a)
     x2 = ((-b) - d) / (2 * a)
     print(f"Уравнение имеет 2 корня. x1={x1},x2={x2}")
