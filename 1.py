@@ -5,7 +5,7 @@ from math import sqrt
 #from math import sqrt as корень - пример как переменовать библиотеку для всего проекта
 
 print("программа для решений квадратных уровнений")
-bad_data = True
+bad_data = True                                 #bad_data - сделали булевым значением (оно или True или False)
 while bad_data == True:
     try:
         a = int(input("Введите число a: "))
