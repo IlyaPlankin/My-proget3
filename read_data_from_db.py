@@ -13,5 +13,4 @@ for elem in data:
     surname = elem[1]
     sex = elem[2]
     phone = elem[3]
-
-print(name, phone)
+    print(name, phone)
