@@ -16,11 +16,13 @@ for elem in data:
     phone = elem[3]
     user = f'{phone};{sex};{surname};{name}'
     f.write(user + '\n')
-f.close()
 
-while 1 == 1:
+data_1 = True
+
+while data_1 == True:
     try:
-        name = input('Введите имя: ')
-           print(f'Телефон абонента {name} - {phone}')
+        name = input("Введите имя: ")
+        print(f'Телефон абонента {elem[3]}')
+        data_1 = False
     except KeyError:
-            print(f'Телефон абонента {name} - не найден')
+        print(f'Телефон абонента {name} - не найден')
