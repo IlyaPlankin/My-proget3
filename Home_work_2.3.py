@@ -17,3 +17,5 @@ for elem in data:
     phone = elem[3]
 f.write(user + '\n')
 f.close()
+
+
