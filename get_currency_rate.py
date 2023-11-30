@@ -2,7 +2,18 @@
 import requests
 import pymysql
 import datetime
+import configparser
 
+def get_data_from_config():
+    config = configparser.ConfigParser()
+    config.read('get_currency_rate.conf')
+    db_host = config['database']['db_host']
+    db_user = config['database']['db_user']
+    db_password = config['database']['db_password']
+    db_name = config['database']['db_name']
+    db_port = int(config['database']['db_port'])
+    cb_site  = config['cb_site']['cb_site']
+    return db_host, db_user, db_password, db_name, db_port, cb_site
 
 def get_data_from_cb(site):
     result = requests.get(site)
@@ -37,16 +48,17 @@ def connect_to_db(host, user, password, database, port):
 
 
 if __name__ == '__main__':
-    db_host = 'nadejnei.net'
-    db_user = 'student'
-    db_password = '1q2w#E$R'
-    db_name = 'test'
-    db_port = 33306
-    cb_site = 'https://www.cbr-xml-daily.ru/daily_json.js'
+    db_host, db_user, db_password, db_name, db_port, cb_site = get_data_from_config()
+
+    #db_host = 'nadejnei.net'
+   # db_user = 'student'
+    #db_password = '1q2w#E$R'
+    #db_name = 'test'
+   # db_port = 33306
+    #cb_site = 'https://www.cbr-xml-daily.ru/daily_json.js'
 
     data = get_data_from_cb(cb_site)  # получил данные с сайта ЦБ в словарь
 
-    connection, cursor = connect_to_db(db_host, db_user, db_password, db_name,
-                                       db_port)  ## получили подключение и курсор к базе данных
+    connection, cursor = connect_to_db(db_host, db_user, db_password, db_name, db_port)  ## получили подключение и курсор к базе данных
     put_result = put_data_to_db(connection, cursor, data) # положили данные в базу
     print(put_result)
