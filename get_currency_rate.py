@@ -3,8 +3,11 @@ import requests
 import pymysql
 import datetime
 import configparser
+import logging
+logging.basicConfig(filename='get_currency_rate.log',level=logging.debug)
 
 def get_data_from_config():
+    logging.debug(f'начинаю читать данные из конфига')
     config = configparser.ConfigParser()
     config.read('get_currency_rate.conf')
     db_host = config['database']['db_host']
@@ -48,7 +51,7 @@ def connect_to_db(host, user, password, database, port):
 
 
 if __name__ == '__main__':
-    db_host, db_user, db_password, db_name, db_port, cb_site = get_data_from_config()
+
 
     #db_host = 'nadejnei.net'
    # db_user = 'student'
@@ -56,9 +59,21 @@ if __name__ == '__main__':
     #db_name = 'test'
    # db_port = 33306
     #cb_site = 'https://www.cbr-xml-daily.ru/daily_json.js'
+    try:
+        db_host, db_user, db_password, db_name, db_port, cb_site = get_data_from_config()
 
-    data = get_data_from_cb(cb_site)  # получил данные с сайта ЦБ в словарь
+        data = get_data_from_cb(cb_site)  # получил данные с сайта ЦБ в словарь
 
-    connection, cursor = connect_to_db(db_host, db_user, db_password, db_name, db_port)  ## получили подключение и курсор к базе данных
-    put_result = put_data_to_db(connection, cursor, data) # положили данные в базу
-    print(put_result)
+        connection, cursor = connect_to_db(db_host, db_user, db_password, db_name,
+                                           db_port)  ## получили подключение и курсор к базе данных
+        put_result = put_data_to_db(connection, cursor, data)  # положили данные в базу
+        print(put_result)
+    except ConnectionRefusedError as cre:
+        print(f'Не удалось подключиться: {cre}')
+    except pymysql.err.OperationalError as poe:
+        print(f'Ошибка sql: {poe}')
+    except requests.exceptions.ConnectionError as cre:
+        print(f'Не удалось подключиться к сайту ЦБ: {cre}')
+    except KeyError as ke:
+        print(f'Не удалось подключиться к сайту ЦБ: {ke}')
+
