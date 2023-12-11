@@ -19,7 +19,13 @@ kali linux - ОС для взлома!
 tails - ОС для приватности (трафик невозможно отсследить)!
 
 VirtualBox -скачать!
-index of /rokylinux/8/9/isos/x86_64/
 
+После установки проверяешь есть ли поддержка 64 бит.
 Если не поддерживается 64 бит в virtualBox то гугли core i7 виртуализация
 Заходишь в Биосс Intel Virtualization technology (Enabled)
+
+
+Скачиваем rokylinux
+index of /rokylinux/8/9/isos/x86_64/
+
+Создаем VM
