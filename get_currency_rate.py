@@ -25,9 +25,7 @@ def get_data_from_config():
 
 
 def get_data_from_cb(site):
-    proxies = {'https': 'http://192.168.39.46:3128', 'http': 'http://192.168.39.46:3128'}
-    result = requests.get(site,proxies=proxies)
-
+    result = requests.get(site)
     valites = result.json()
 
     valutes_raw_dict = valites['Valute']

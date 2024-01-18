@@ -90,8 +90,6 @@ if __name__ == '__main__':
         out_valute_rate = get_valute_rate(connection, cursor, out_valute)
         connection.close()
         out_valute_count = exchange_valute(in_valute_rate, out_valute_rate, in_valute_count)
-        set_to_redis(redis_connection, in_valute, in_valute_rate, redis_cache_time)
-        set_to_redis(redis_connection, out_valute, out_valute_rate, redis_cache_time)
         print('Данные получены из БД')
     end_time = datetime.datetime.now()
     work_time = end_time - start_time
