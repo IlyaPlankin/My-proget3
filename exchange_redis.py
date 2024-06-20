@@ -33,7 +33,7 @@ def connect_to_db(host, user, password, database, port):
 
 
 def connect_to_redis(redis_host, redis_port, redis_password):
-    redis_connection = redis.StrictRedis(host=redis_host, port=redis_port, password=redis_password)
+    redis_connection = redis.StrictRedis(host=redis_host, port=redis_port)
     return redis_connection
 
 
@@ -89,7 +89,10 @@ if __name__ == '__main__':
         in_valute_rate = get_valute_rate(connection, cursor, in_valute)
         out_valute_rate = get_valute_rate(connection, cursor, out_valute)
         connection.close()
+        set_to_redis(redis_connection,in_valute,in_valute_rate,3600)
+        set_to_redis(redis_connection, out_valute, out_valute_rate, 3600)
         out_valute_count = exchange_valute(in_valute_rate, out_valute_rate, in_valute_count)
+
         print('Данные получены из БД')
     end_time = datetime.datetime.now()
     work_time = end_time - start_time
