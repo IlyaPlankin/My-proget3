@@ -7,4 +7,4 @@ def root():
 
 @app.get("/privet/{username}")
 def privet(username):
-    return {"message":f"Приветх"}
+    return {"message":f"Привет {username}"}
