@@ -95,4 +95,3 @@ def obmen(val1, val2, count):
         set_to_redis(redis_connection, out_valute, out_valute_rate, 3600)
         out_valute_count = exchange_valute(in_valute_rate, out_valute_rate, in_valute_count)
     return f'Вы получите {out_valute_count} {out_valute}. '
-
