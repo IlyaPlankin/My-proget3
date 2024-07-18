@@ -5,6 +5,7 @@ import datetime
 import configparser
 import redis
 
+# http://192.168.20.46:8080/plot?val=USD&start_date=20240610&end_date=20240715
 logging.basicConfig(filename='exchange.log', level=logging.DEBUG)
 
 
@@ -73,6 +74,16 @@ def get_data_from_config():
 
 
 app = FastAPI()
+
+
+@app.get("/plot")
+def plot(val, start_date, end_date):
+    db_host, db_user, db_password, db_name, db_port, _, _, _, _ = get_data_from_config()
+    connection, cursor = connect_to_db(db_host, db_user, db_password, db_name, db_port)
+    select_str = f'SELECT date,rate from currency_exchange_rate WHERE valute = "{val}" and `date` BETWEEN "{start_date}" AND "{end_date}"'
+    cursor.execute(select_str)
+    points = cursor.fetchall()
+    return points
 
 
 @app.get("/obmen/")
