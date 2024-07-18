@@ -24,8 +24,15 @@ layout = [[sg.Text("Первая валюта:", font='Helvetica 16'), sg.InputT
           [sg.Text("Количество:    ", font='Helvetica 16'), sg.InputText(font='Helvetica 16', key='cv')],
           [sg.Text("0.0", font='Helvetica 16', key='result')],
           [sg.Button("Вычислить", enable_events=True, key='-CALC-', font='Helvetica 16'),
-           sg.Button("Очистить", enable_events=True, key='-CLEAR-', font='Helvetica 16')]]
+           sg.Button("Очистить", enable_events=True, key='-CLEAR-', font='Helvetica 16'),
+           sg.Button("График валют", enable_events=True, key="plot", font='Helvetica 16')]]
 
+layout2 = [[sg.InputText('Введите валюту', font='Helvetica 16'), sg.InputText('Начало периода', font='Helvetica 16'),
+            sg.InputText('Конец периода!', font='Helvetica 16')],
+           [sg.Button('Построить график', font='Helvetica 16', enable_events=True, key='draw')],
+           [sg.Canvas(key='canvas', size=(1500, 800), background_color="white")],
+           [sg.Button('Закрыть окно', font='Helvetica 16', enable_events=True, key='close_plot')]
+           ]
 window = sg.Window("Обменник валют.", layout)
 
 while True:
@@ -41,5 +48,15 @@ while True:
         get_ovcount_from_api(values['iv'], values['ov'], values['cv'])
     if event == '-CLEAR-':
         clear()
+    if event == 'plot':
+        window.Hide()
+        window2 = sg.Window("График валют за период.", layout2)
+        while True:
+            event2, values2 = window2.read()
+            if event2 == 'close_plot':
+                window2.close()
+                window.UnHide()
+                break
+
 # закрываем окно и освобождаем используемые ресурсы
 window.close()
