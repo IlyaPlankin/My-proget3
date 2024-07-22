@@ -1,5 +1,6 @@
 import PySimpleGUI as sg
 import requests
+import matplotlib.pyplot as plt
 
 
 def get_ovcount_from_api(iv, ov, count):
@@ -30,7 +31,7 @@ layout = [[sg.Text("Первая валюта:", font='Helvetica 16'), sg.InputT
 layout2 = [[sg.InputText('Введите валюту', font='Helvetica 16'), sg.InputText('Начало периода', font='Helvetica 16'),
             sg.InputText('Конец периода!', font='Helvetica 16')],
            [sg.Button('Построить график', font='Helvetica 16', enable_events=True, key='draw')],
-           [sg.Canvas(key='canvas', size=(1500, 800), background_color="white")],
+           # [sg.Canvas(key='canvas', size=(1500,800), background_color="white")],
            [sg.Button('Закрыть окно', font='Helvetica 16', enable_events=True, key='close_plot')]
            ]
 window = sg.Window("Обменник валют.", layout)
@@ -57,6 +58,23 @@ while True:
                 window2.close()
                 window.UnHide()
                 break
+            if event2 == 'draw':
+                val = values2[0]
+                start_date = values2[1]
+                end_date = values2[2]
+                result = requests.get(
+                    f'http://192.168.20.46:8080/plot?val={val}&start_date={start_date}&end_date={end_date}')
+                raw_points = result.json()
+                dates = []
+                rates = []
 
-# закрываем окно и освобождаем используемые ресурсы
-window.close()
+                for pl in raw_points:
+                    dates.append(pl[0])
+                    rates.append(float(pl[1]))
+                plt.xlabel("Даты")
+                plt.ylabel('Курс в рублях')
+                plt.title(f'Курс валюты {val} от {start_date} до {end_date}')
+                # plt.legend("123432523523")
+                plt.plot(dates, rates)
+                # plt.bar(dates, rates)
+                plt.show()
