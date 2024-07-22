@@ -77,32 +77,38 @@ app = FastAPI()
 
 
 @app.get("/plot")
-def plot(val, start_date, end_date):
-    db_host, db_user, db_password, db_name, db_port, _, _, _, _ = get_data_from_config()
-    connection, cursor = connect_to_db(db_host, db_user, db_password, db_name, db_port)
-    select_str = f'SELECT date,rate from currency_exchange_rate WHERE valute = "{val}" and `date` BETWEEN "{start_date}" AND "{end_date}"'
-    cursor.execute(select_str)
-    points = cursor.fetchall()
-    return points
+def plot(val, start_date, end_date, token):
+    if token == "123456":
+        db_host, db_user, db_password, db_name, db_port, _, _, _, _ = get_data_from_config()
+        connection, cursor = connect_to_db(db_host, db_user, db_password, db_name, db_port)
+        select_str = f'SELECT date,rate from currency_exchange_rate WHERE valute = "{val}" and `date` BETWEEN "{start_date}" AND "{end_date}"'
+        cursor.execute(select_str)
+        points = cursor.fetchall()
+        return points
+    else:
+        return "unauthorized"
 
 
 @app.get("/obmen/")
-def obmen(val1, val2, count):
-    in_valute = val1
-    out_valute = val2
-    in_valute_count = int(count)
-    db_host, db_user, db_password, db_name, db_port, redis_port, redis_pass, redis_host, redis_cache_time = get_data_from_config()
-    redis_connection = connect_to_redis(redis_host, redis_port, redis_pass)
-    in_valute_rate = get_from_redis(redis_connection, in_valute)
-    out_valute_rate = get_from_redis(redis_connection, out_valute)
-    if in_valute_rate and out_valute_rate:
-        out_valute_count = exchange_valute(in_valute_rate, out_valute_rate, in_valute_count)
+def obmen(val1, val2, count, token):
+    if token == "123456":
+        in_valute = val1
+        out_valute = val2
+        in_valute_count = int(count)
+        db_host, db_user, db_password, db_name, db_port, redis_port, redis_pass, redis_host, redis_cache_time = get_data_from_config()
+        redis_connection = connect_to_redis(redis_host, redis_port, redis_pass)
+        in_valute_rate = get_from_redis(redis_connection, in_valute)
+        out_valute_rate = get_from_redis(redis_connection, out_valute)
+        if in_valute_rate and out_valute_rate:
+            out_valute_count = exchange_valute(in_valute_rate, out_valute_rate, in_valute_count)
+        else:
+            connection, cursor = connect_to_db(db_host, db_user, db_password, db_name, db_port)
+            in_valute_rate = get_valute_rate(connection, cursor, in_valute)
+            out_valute_rate = get_valute_rate(connection, cursor, out_valute)
+            connection.close()
+            set_to_redis(redis_connection, in_valute, in_valute_rate, 3600)
+            set_to_redis(redis_connection, out_valute, out_valute_rate, 3600)
+            out_valute_count = exchange_valute(in_valute_rate, out_valute_rate, in_valute_count)
+        return f'Вы получите {out_valute_count} {out_valute}. '
     else:
-        connection, cursor = connect_to_db(db_host, db_user, db_password, db_name, db_port)
-        in_valute_rate = get_valute_rate(connection, cursor, in_valute)
-        out_valute_rate = get_valute_rate(connection, cursor, out_valute)
-        connection.close()
-        set_to_redis(redis_connection, in_valute, in_valute_rate, 3600)
-        set_to_redis(redis_connection, out_valute, out_valute_rate, 3600)
-        out_valute_count = exchange_valute(in_valute_rate, out_valute_rate, in_valute_count)
-    return f'Вы получите {out_valute_count} {out_valute}. '
+        return "unauthorized"
