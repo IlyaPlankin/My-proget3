@@ -31,7 +31,7 @@ layout = [[sg.Text("Первая валюта:", font='Helvetica 16'), sg.InputT
 layout2 = [[sg.InputText('Введите валюту', font='Helvetica 16'), sg.InputText('Начало периода', font='Helvetica 16'),
             sg.InputText('Конец периода!', font='Helvetica 16')],
            [sg.Button('Построить график', font='Helvetica 16', enable_events=True, key='draw')],
-           # [sg.Canvas(key='canvas', size=(1500,800), background_color="white")],
+           #[sg.Canvas(key='canvas', size=(1500,800), background_color="white")],
            [sg.Button('Закрыть окно', font='Helvetica 16', enable_events=True, key='close_plot')]
            ]
 window = sg.Window("Обменник валют.", layout)
@@ -75,6 +75,12 @@ while True:
                 plt.ylabel('Курс в рублях')
                 plt.title(f'Курс валюты {val} от {start_date} до {end_date}')
                 # plt.legend("123432523523")
-                plt.plot(dates, rates)
-                # plt.bar(dates, rates)
+                #plt.plot(dates, rates)
+                plt.bar(dates, rates)
                 plt.show()
+
+
+
+
+# закрываем окно и освобождаем используемые ресурсы
+window.close()
