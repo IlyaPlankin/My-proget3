@@ -94,7 +94,7 @@ app = FastAPI()
 
 @app.get("/plot")
 def plot(val, start_date, end_date,token):
-    if token == "123456789"
+    if token == "123456789":
         db_host, db_user, db_password, db_name, db_port, _, _, _, _ = get_data_from_config()
         connection, cursor = connect_to_db(db_host, db_user, db_password, db_name, db_port)
         select_str = f'SELECT date,rate from currency_exchange_rate WHERE valute = "{val}" and `date` BETWEEN "{start_date}" AND "{end_date}"'
