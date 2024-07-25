@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 
 
 def get_ovcount_from_api(iv, ov, count):
-    apiurl = f'http://192.168.218.233:8080/obmen?val1={iv}&val2={ov}&count={count}'
+    apiurl = f'http://192.168.218.233:8080/obmen?val1={iv}&val2={ov}&count={count}&count={Token}'
     result = requests.get(apiurl)
     result_sring = result.text
     result_elem = window['result']
