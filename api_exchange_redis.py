@@ -4,12 +4,8 @@ import logging
 import datetime
 import configparser
 import redis
-import Token
-
-# http://192.168.20.46:8080/plot?val=USD&start_date=20240610&end_date=20240715
+#http://192.168.20.46:8080/plot?val=USD&start_date=20240610&end_date=20240715
 logging.basicConfig(filename='exchange.log', level=logging.DEBUG)
-
-
 def get_valute_rate(connection, cursor, valute):
     if valute == "RUB" or valute == "RUR":
         return 1
@@ -40,12 +36,6 @@ def connect_to_redis(redis_host, redis_port, redis_password):
     return redis_connection
 
 
-#2024.07.25--------------------------------------------------------
-def connect_to_token(token_password):
-    token_connection = Token.connect(password=token_password)
-    return token_connection
-#-------------------------------------------------------------------
-
 def get_from_redis(redis_connection, valute):
     valute_rate = (redis_connection.get(valute))
     if valute_rate:
@@ -53,7 +43,6 @@ def get_from_redis(redis_connection, valute):
         return valute_rate
     else:
         return False
-
 
 def set_to_redis(redis_connection, valute, valute_rate, redis_cache_time):
     redis_connection.set(valute, str(valute_rate), ex=redis_cache_time)
@@ -79,37 +68,25 @@ def get_data_from_config():
     redis_cache_time = int(config['redis']['redis_cache_time'])
     return db_host, db_user, db_password, db_name, db_port, redis_port, redis_pass, redis_host, redis_cache_time
 
-
-#2024.07.25--------------------------------------------
-def get_token_from_config():
-    config = configparser.ConfigParser()
-    config.read('exchange_redis.conf')
-    token_password = config['token']['token_password']
-    return token_password
-#-------------------------------------------------------
-
-
 app = FastAPI()
 
-
 @app.get("/plot")
-def plot(val, start_date, end_date,token):
-    if token == "123456789":
+def plot(val, start_date, end_date, token):
+    if token == "123456":
         db_host, db_user, db_password, db_name, db_port, _, _, _, _ = get_data_from_config()
         connection, cursor = connect_to_db(db_host, db_user, db_password, db_name, db_port)
         select_str = f'SELECT date,rate from currency_exchange_rate WHERE valute = "{val}" and `date` BETWEEN "{start_date}" AND "{end_date}"'
         cursor.execute(select_str)
         points = cursor.fetchall()
         return points
-    else: "unauthorized"
-
+    else:
+        return "unauthorized"
 @app.get("/obmen/")
 def obmen(val1, val2, count, token):
-    if token == "123456789":
+    if token == "123456":
         in_valute = val1
         out_valute = val2
         in_valute_count = int(count)
-        in_token_password
         db_host, db_user, db_password, db_name, db_port, redis_port, redis_pass, redis_host, redis_cache_time = get_data_from_config()
         redis_connection = connect_to_redis(redis_host, redis_port, redis_pass)
         in_valute_rate = get_from_redis(redis_connection, in_valute)
