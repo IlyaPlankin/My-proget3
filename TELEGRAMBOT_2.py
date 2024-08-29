@@ -17,12 +17,12 @@ def iv_handler(pm):
     sent_msg = bot.send_message(pm.chat.id, f"Вами была выбрана валюта {iv}, на какую валюту вы бы хотели ее обменять (пример: RUB)?")
     bot.register_next_step_handler(sent_msg, ov_handler, iv)
 
-def ov_handler(pm, iv):
+def ov_handler(pm):
     ov = pm.text
     sent_msg = bot.send_message(pm.chat.id, f"Вами была выбрана валюта {ov}, сколько вы хотите обменять (только цифры)?")
     bot.register_next_step_handler(sent_msg, count_handler, ov)
 
-def count_handler(pm, ov):
+def count_handler(pm):
     count = pm.text
     bot.register_next_step_handler(f"На сегодняшний день вы получите{result}?")
 
