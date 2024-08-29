@@ -19,8 +19,13 @@ def iv_handler(pm):
 
 def ov_handler(pm, iv):
     ov = pm.text
-    bot.send_message(pm.chat.id, f"Ваша валюта {iv}, и вы ее хотите обменять на {ov}.")
+    sent_msg = bot.send_message(pm.chat.id, f"Вами была выбрана валюта {ov}, сколько вы хотите обменять (только цыфры)?")
+    bot.register_next_step_handler(sent_msg, count_handler, ov)
+
+def count_handler(pm, ov):
+    count = pm.text
     bot.register_next_step_handler(f"На сегодняшний день вы получите{result}?")
+
 
 def get_ovcount_from_api(iv, ov, count):
     apiurl = f'http://192.168.159.232:8080/obmen?val1={iv}&val2={ov}&count={count}'
