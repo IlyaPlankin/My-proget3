@@ -1,6 +1,7 @@
 import telebot
 import requests
-from obmen_gui import result
+
+from Give_text_web import result
 
 bot = telebot.TeleBot("7322048253:AAFnwogkCMgl_wBxoYaAqlyoeTXmgT2cmAo")
 
@@ -15,19 +16,24 @@ def iv_handler(pm):
     sent_msg = bot.send_message(pm.chat.id, f"Вами была выбрана валюта {iv}, на какую валюту вы бы хотели ее обменять (пример: RUB)?")
     bot.register_next_step_handler(sent_msg, ov_handler, iv)
 
-def ov_handler(pm):
+def ov_handler(pm,iv):
     ov = pm.text
     sent_msg = bot.send_message(pm.chat.id, f"Вами была выбрана валюта {ov}, сколько вы хотите обменять (только цифры)?")
-    bot.register_next_step_handler(sent_msg, count_handler, ov)
+    bot.register_next_step_handler(sent_msg, count_handler,iv, ov)
 
-def count_handler(pm):
+def count_handler(pm, iv,ov):
     count = pm.text
-    bot.register_next_step_handler(f"На сегодняшний день вы получите{result}?")
+    print(iv,ov)
+    result = get_ovcount_from_api(iv, ov, count)
+    sent_msg = bot.send_message(pm.chat.id,f"На сегодняшний день вы получите{result}?")
 
 
 def get_ovcount_from_api(iv, ov, count):
+    iv = iv.upper()
+    ov = ov.upper()
     apiurl = f'http://192.168.207.232:8080/obmen/?val1={iv}&val2={ov}&count={count}'
-    result = requests.get(apiurl)
-
+    print(apiurl)
+    #result = requests.get(apiurl)
+    return "125 EUR"
 
 bot.polling()
