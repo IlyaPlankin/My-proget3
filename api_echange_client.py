@@ -5,7 +5,7 @@ if __name__ == '__main__':
     out_valute = input("Какую вылюту вы хотите получить? ")
     in_valute_count = int(input("Сколько валюты вы хотите обменять! "))
 
-    result=requests.get(f'http://192.168.159.232:8080/obmen/?val1={in_valute}&val2={out_valute}&count={in_valute_count}')
+    result=requests.get(f'http://192.168.207.232:8080/obmen/?val1={in_valute}&val2={out_valute}&count={in_valute_count}')
 
 
 print(result.text)

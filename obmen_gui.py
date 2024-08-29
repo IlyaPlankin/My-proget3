@@ -9,7 +9,7 @@ import hashlib
 
 
 def get_ovcount_from_api(iv, ov, count):
-    apiurl = f'http://192.168.159.232:8080/obmen?val1={iv}&val2={ov}&count={count}'
+    apiurl = f'http://192.168.207.232:8080/obmen?val1={iv}&val2={ov}&count={count}'
     result = requests.get(apiurl)
     result_sring = result.text
     result_elem = window['result']
