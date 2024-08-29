@@ -22,10 +22,9 @@ def ov_handler(pm, iv):
     bot.send_message(pm.chat.id, f"Ваша валюта {iv}, и вы ее хотите обменять на {ov}.")
     bot.register_next_step_handler(f"На сегодняшний день вы получите{result}?")
 
-bot.polling()
-
 def get_ovcount_from_api(iv, ov, count):
     apiurl = f'http://192.168.159.232:8080/obmen?val1={iv}&val2={ov}&count={count}'
     result = requests.get(apiurl)
 
 
+bot.polling()
