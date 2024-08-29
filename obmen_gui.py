@@ -91,7 +91,7 @@ while True:
                 start_date = values2[1]
                 end_date = values2[2]
                 result = requests.get(
-                    f'http://192.168.159.232:8080/plot?val={val}&start_date={start_date}&end_date={end_date}')
+                    f'http://192.168.207.232:8080/plot?val={val}&start_date={start_date}&end_date={end_date}')
                 raw_points = result.json()
                 dates = []
                 rates = []
