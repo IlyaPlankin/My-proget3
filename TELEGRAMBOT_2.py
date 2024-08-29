@@ -1,6 +1,5 @@
 import telebot
 import requests
-
 from obmen_gui import result
 
 bot = telebot.TeleBot("7322048253:AAFnwogkCMgl_wBxoYaAqlyoeTXmgT2cmAo")
