@@ -11,7 +11,6 @@ def welcome(pm):
     sent_msg = bot.send_message(pm.chat.id, "Прошу Вас написать валюту, которую хотите обменять (пример: USD)")
     bot.register_next_step_handler(sent_msg, iv_handler)
 
-
 def iv_handler(pm):
     iv = pm.text
     sent_msg = bot.send_message(pm.chat.id, f"Вами была выбрана валюта {iv}, на какую валюту вы бы хотели ее обменять (пример: RUB)?")
